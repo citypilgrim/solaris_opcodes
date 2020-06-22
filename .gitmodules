@@ -1,0 +1,8 @@
+[submodule "file_readwrite"]
+	path = file_readwrite
+	url = git@github.com:bboytian/solaris_opcodes.file_readwrite.git
+	branch = stable
+[submodule "product_calc"]
+	path = product_calc
+	url = git@github.com:bboytian/solaris_opcodes.product_calc.git
+	branch = stable

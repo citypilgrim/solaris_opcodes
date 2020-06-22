@@ -1,0 +1,31 @@
+Objectives
+
+1. select product data
+
+2. convert data 3d array
+
+3. visualise
+
+
+Scope of use
+
+=> Data input is cloud position => arabuilder
+
+   - pairing with angular position, we can locate the cloud bottom.
+
+   - For a given pixel we have a list of cloud positions
+
+   - thus a 3d array: 0-axis -> row, 1-axis -> columns, 2-axis ->
+     cloud values
+
+=> Data input is range with corresponding values => linebuilder
+
+   - 3d line plot
+
+=> For future, discretisation of single pixel column with spacing
+dependent on SHDOM, the input array would then become a mask
+
+
+Technical details
+
+- height and bearing offset of lidar to be keyed in here
