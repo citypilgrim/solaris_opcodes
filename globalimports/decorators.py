@@ -5,6 +5,8 @@ import os
 import sys
 import time
 
+from ._modifications import *
+
 
 # defining decorators
 def verbose(func):              # should be placed last
@@ -41,21 +43,29 @@ def timer(_func=None, *, ntimes=1000):
     else:
         return decorator_func
 
-def announcer(_func=None, *, endboo=True):
+def announcer(_func=None, *, endboo=True, newlineboo=False):
     '''anounces when function is called and when it finishes; if specified'''
     def decorator_func(func):
         @wraps(func)
         def wrapper_func(*args, **kwargs):
-            print('run {}.{}@{:%Y%m%d%H%M}...'.format(
-                func.__module__, func.__name__,
-                dt.datetime.now())
+            startstr = '{:%Y%m%d%H%M} run {}.{}...'.format(
+                dt.datetime.now(),
+                func.__module__, func.__name__
             )
+            if newlineboo and not endboo:
+                startstr += '\n'
+            print(startstr)
             wrapperret = func(*args, **kwargs)
+
+            endstr = '{:%Y%m%d%H%M} end {}.{}'.format(
+                dt.datetime.now(),
+                func.__module__, func.__name__
+            )
+
             if endboo:
-                print('end {}.{}@{:%Y%m%d%H%M}'.format(
-                    func.__module__, func.__name__,
-                    dt.datetime.now())
-                )
+                if newlineboo:
+                    endstr += '\n'
+                print(endstr)
             return wrapperret
         return wrapper_func
     if _func:
