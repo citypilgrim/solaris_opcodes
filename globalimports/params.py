@@ -19,28 +19,25 @@ SOLARISRAZONDATADIR = SOLARISDATADIR + '/razon_E2'
 
 ## data nomenclature; indices to change manually when fmts are adjusted
 DATEFMT, TIMEFMT = '{:%Y%m%d}', '{:%Y%m%d%H%M}'  # must be compatible for pandas
-DATELEN, TIMELEN = 8, 12
-SCANPATSDATEIND, SCANPATEDATEIND, SCANPATDATEIND = -36, -23, -11
-SCANPATFILE = TIMEFMT + '_' + TIMEFMT + 'scanpat.txt'
-MPLDATEIND, MPLTIMEIND = -8, -4
+SCANPATSDATEIND, SCANPATEDATEIND, SCANPATDATEIND = -36, -23, -12
+SCANPATFILE = TIMEFMT + '_' + TIMEFMT + '_scanpat.txt'
 MPLFILE = TIMEFMT + '.mpl'
-MPLEOMTIMEIND = -8
-MPLEOMFILE = TIMEFMT + 'eom.flag'  # indicates end of measurement
-MPLLOGDATEIND, MPLLOGTIMEIND = -14, -10  # maybe redundant
+MPLEOMFILE = TIMEFMT + '_eom.flag'  # indicates end of measurement
 MPLLOGFILE = TIMEFMT + 'MPLLog.txt'
 MPLLOGCURFILE = 'mplLog.txt'
-OVERLAPTIMEIND, OVERLAPNAMEIND = TIMELEN, -11
-# OVERLAPFILE = TIMEFMT + '_{}overlap.mpl' # bintime
-OVERLAPFILE = TIMEFMT + '_{}overlap.csv'  # bintime
-AFTERPULSETIMEIND, AFTERPULSENAMEIND = TIMELEN, -14
-# AFTERPULSEFILE = TIMEFMT + '_{}afterpulse.mpl'
-AFTERPULSEFILE = TIMEFMT + '_{}afterpulse.csv'
-DEADCOUNTNAMEIND = -13
-DEADCOUNTFILE = TIMEFMT + '_{}deadcount.mpl'
-DEADTIMEMODELIND = -12
-DEADTIMEFILE = '{}deadtime.txt'  # s/n of detector head
+# OVERLAPFILE = TIMEFMT + '_{}_overlap.mpl' # bintime
+OVERLAPFILE = TIMEFMT + '_{}_overlap.csv'  # bintime
+# AFTERPULSEFILE = TIMEFMT + '_{}_afterpulse.mpl'
+AFTERPULSEFILE = TIMEFMT + '_{}_afterpulse.csv'
+DEADCOUNTFILE = TIMEFMT + '_{}_deadcount.mpl'
+DEADTIMEFILE = '{}_deadtime.txt'  # s/n of detector head
 
 # scripting; __main__
+
+
+# ara_calc
+ANGOFFSET = 141                 # [deg]
+
 
 # product_calc
 
@@ -48,7 +45,7 @@ DEADTIMEFILE = '{}deadtime.txt'  # s/n of detector head
 BINTIMEFMT, BINNUMFMT = '{:.2e}', '{:.0f}'
 
 ## nrb_calc
-NRBDIR = TIMEFMT + '_' + TIMEFMT + '_{}NRB.txt'  # start, end, array shape
+NRBDIR = TIMEFMT + '_' + TIMEFMT + '_{}_NRB.txt'  # start, end, array shape
 BLINDRANGE = 0.3                # [km], lidar blind for starting distance
 DELEOVERE = 0.01  # ~1% for averaging time <= 1 min,
                   # also in cali_profiles.afterpulse_gen
@@ -64,21 +61,18 @@ RAYLEIGHCDLAMBDA = 523  # [nm]
 RAYLEIGHCDFDIR = 'rayfil-{}_sing.cdf'  # wavelength
 WAVELENGTH = 532  # [nm]
 WEATHER = 'summer'  # either 'summer' or 'winter'
-RAYLEIGHPROIND = -12
-RAYLEIGHPROFILE = '{}_{}_'+BINTIMEFMT+'_'+BINNUMFMT+'rayleigh.txt'  # weather,
-                                                                    # wavelength
+RAYLEIGHPROIND = -13
+RAYLEIGHPROFILE = '{}_{}_'+BINTIMEFMT+'_'+BINNUMFMT+'_rayleigh.txt'  # weather,
+                                                                     # wavelength
 
 ## cali_profiles
 CALIPROFILESDIR = SOLARISCODESDIR + '/product_calc/cali_profiles/profiles'
 CALIWRITESIGFIG = 7
-AFTERPULSEPROTIMEIND = -len(BINTIMEFMT+BINNUMFMT) - 18
 AFTERPULSEPROFILE = '_'.join([TIMEFMT, BINTIMEFMT, BINNUMFMT]) \
-    + 'afterpulse_{}.txt'       # lidarname
-OVERLAPPROTIMEIND = -len(BINTIMEFMT+BINNUMFMT) - 16
+    + '_{}_afterpulse.txt'       # lidarname
 OVERLAPPROFILE = '_'.join([TIMEFMT, BINTIMEFMT, BINNUMFMT]) \
-    + 'overlap_{}.txt'          # lidarname
-DEADTIMEPROIND = -15
-DEADTIMEPROFILE = '{}deadtime_{}.txt'  # s/n of detector head, lidarname
+    + '_{}_overlap.txt'          # lidarname
+DEADTIMEPROFILE = '{}_{}_deadtime.txt'  # s/n of detector head, lidarname
 SPEEDOFLIGHT = 299792.45737195015  # [km s^-1]
 
 ### cali_profiles.afterpulse_*gen

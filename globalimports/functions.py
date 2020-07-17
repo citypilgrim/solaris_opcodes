@@ -1,6 +1,9 @@
 # imports
 from functools import wraps
+import re
 import sys
+
+import numpy as np
 
 from ._modifications import *
 
@@ -22,6 +25,10 @@ def haltlogging(func):
 
 
 # defining functions
+
+def DIRPARSEFN(dirstr, field, delimiters='_|\.'):
+    return re.split(delimiters, dirstr)[field]
+DIRPARSEFN = np.vectorize(DIRPARSEFN)
 
 def DIRCONFN(*dirl):
     '''
@@ -107,49 +114,4 @@ def GETRESPONSEFN(message, exitboo, twiceboo, checkboo=False, prevmsg=None):
 
 # testing
 if __name__ == '__main__':
-    # from .globalimports import *
-
-    # print('{}'.format(DIRCONFN(WINDOWFILESDIR, SEDFILE)))
-
-    # Process class
-    import multiprocessing as mp
-    class _procwrapper(mp.Process):
-        '''
-        To be used in a way similar to multiprocessing.Process.
-        It logs the print statements in the specified logfiles
-        '''
-        def __init__(self, logfile, target, args=(), kwargs={}):
-            print(
-                '{:%Y%m%d%H%M} run {}.{}...'.
-                format(dt.datetime.now(), target.__module__, target.__name__)
-            )
-            super().__init__(target=target, args=args, kwargs=kwargs)
-            self.logfile = logfile
-
-        def run(self):
-            '''
-            This runs on self.start() in a new process
-            '''
-            SETLOGFN(self.logfile)
-            if self._target:
-                self._target(*self._args, **self._kwargs)
-            SETLOGFN()
-
-    mainlog = 'C:/Users/mpluser/Desktop/mainlog.txt'
-    print('main func is running')
-    SETLOGFN(mainlog)
-    def play_func():
-        print('play_func')
-    pplay_func = _procwrapper(
-        'C:/Users/mpluser/Desktop/playfunc.txt', play_func
-    )
-    pplay_func.start()
-    pplay_func.join()
-
-    SETLOGFN('C:/Users/mpluser/Desktop/sublog.txt')
-    print('pretend sub func is running')
-    GETRESPONSEFN('this is a test?', True, True)
-    SETLOGFN(mainlog)
-    print('main func is running', flush=True)
-    import time
-    time.sleep(10)
+    pass
