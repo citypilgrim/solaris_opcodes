@@ -1,8 +1,0 @@
-globalimports/__init__.py
-product_calc/cloud_calc/gcdm/__main__.py
-product_calc/__main__.py
-product_calc/constant_profiles/rayleigh_gen/__main__.py
-product_calc/nrb_calc/__main__.py
-product_calc/cali_profiles/__main__.py
-file_readwrite/mpl_reader/__main__.py
-file_readwrite/mpl_reader/__main__.py
