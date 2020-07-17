@@ -1,5 +1,6 @@
 # imports
 from functools import wraps
+import os.path as osp
 import re
 import sys
 
@@ -26,9 +27,23 @@ def haltlogging(func):
 
 # defining functions
 
-def DIRPARSEFN(dirstr, field, delimiters='_|\.'):
-    return re.split(delimiters, dirstr)[field]
-DIRPARSEFN = np.vectorize(DIRPARSEFN)
+def _dirparse_func(dirstr, field, delimiters):
+    dirstr = osp.basename(dirstr)
+    fielde_l = re.split(delimiters, dirstr)
+    try:                        # adding 'dot' to file extension
+        if dirstr[-(len(fielde_l[-1])+1)] == '.':
+            fielde_l[-1] = '.' + fielde_l[-1]
+    except IndexError:          # single field no extension
+        pass
+    return fielde_l[field]
+_vdirparse_func = np.vectorize(_dirparse_func)
+def DIRPARSEFN(dirstr, field=0, delimiters='_|\.'):
+    '''needs to retain '.' in the last field it seperates'''
+    if type(dirstr) in [list, np.ndarray]:
+        return _vdirparse_func(dirstr, field, delimiters)
+    else:
+        return _dirparse_func(dirstr, field, delimiters)
+
 
 def DIRCONFN(*dirl):
     '''
@@ -55,7 +70,6 @@ def DIRCONFN(*dirl):
 
     return path
 
-import datetime as dt
 def SETLOGFN(stdoutlog=None, stderrlog=None):
     if stdoutlog:               # setting new logfile
         SETLOGFN()

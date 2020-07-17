@@ -19,10 +19,11 @@ SOLARISRAZONDATADIR = SOLARISDATADIR + '/razon_E2'
 
 ## data nomenclature; indices to change manually when fmts are adjusted
 DATEFMT, TIMEFMT = '{:%Y%m%d}', '{:%Y%m%d%H%M}'  # must be compatible for pandas
-SCANPATSDATEIND, SCANPATEDATEIND, SCANPATDATEIND = -36, -23, -12
 SCANPATFILE = TIMEFMT + '_' + TIMEFMT + '_scanpat.txt'
+MPLTIMEFIELD, MPLFILEFIELD = 0, 1
 MPLFILE = TIMEFMT + '.mpl'
-MPLEOMFILE = TIMEFMT + '_eom.flag'  # indicates end of measurement
+MPLEOMTIMEFIELD, MPLEOMFILEFIELD = 0, 1
+MPLEOMFILE = TIMEFMT + '.eomflag'  # indicates end of measurement
 MPLLOGFILE = TIMEFMT + 'MPLLog.txt'
 MPLLOGCURFILE = 'mplLog.txt'
 # OVERLAPFILE = TIMEFMT + '_{}_overlap.mpl' # bintime
@@ -61,7 +62,6 @@ RAYLEIGHCDLAMBDA = 523  # [nm]
 RAYLEIGHCDFDIR = 'rayfil-{}_sing.cdf'  # wavelength
 WAVELENGTH = 532  # [nm]
 WEATHER = 'summer'  # either 'summer' or 'winter'
-RAYLEIGHPROIND = -13
 RAYLEIGHPROFILE = '{}_{}_'+BINTIMEFMT+'_'+BINNUMFMT+'_rayleigh.txt'  # weather,
                                                                      # wavelength
 
