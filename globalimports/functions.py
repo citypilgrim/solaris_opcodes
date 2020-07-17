@@ -5,7 +5,6 @@ import sys
 from ._modifications import *
 
 
-# defining decorators for global functions
 def haltlogging(func):
     '''
     Halts redirection of stdout and stderr logfiles and outputs to __stdout__ and
@@ -108,7 +107,7 @@ def GETRESPONSEFN(message, exitboo, twiceboo, checkboo=False, prevmsg=None):
 
 # testing
 if __name__ == '__main__':
-    # from .params import *
+    # from .globalimports import *
 
     # print('{}'.format(DIRCONFN(WINDOWFILESDIR, SEDFILE)))
 
