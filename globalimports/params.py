@@ -20,21 +20,21 @@ SOLARISRAZONDATADIR = SOLARISDATADIR + '/razon_E2'
 ## data nomenclature; indices to change manually when fmts are adjusted
 DATEFMT, TIMEFMT = '{:%Y%m%d}', '{:%Y%m%d%H%M}'  # must be compatible for pandas
 SCANPATFILE = TIMEFMT + '_' + TIMEFMT + '_scanpat.txt'
-MPLTIMEFIELD, MPLEXTFIELD = 0, 1
+MPLTIMEFIELD = 0
 MPLFILE = TIMEFMT + '.mpl'
-MPLEOMTIMEFIELD, MPLEOMEXTFIELD = 0, 1
-MPLEOMFILE = TIMEFMT + '.eomflag'  # indicates end of measurement
+MPLEOMTIMEFIELD = 0
+MPLEOMFILE = TIMEFMT + '_eom.flag'  # indicates end of measurement
 MPLLOGFILE = TIMEFMT + 'MPLLog.txt'
 MPLLOGCURFILE = 'mplLog.txt'
-OVERLAPTIMEFIELD, OVERLAPBINTIMEFIELD, OVERLAPFILEFIELD = 0, 1, 2
+OVERLAPTIMEFIELD, OVERLAPBINTIMEFIELD = 0, 1
 # OVERLAPFILE = TIMEFMT + '_{}_overlap.mpl' # bintime
 OVERLAPFILE = TIMEFMT + '_{}_overlap.csv'  # bintime
-AFTERPULSETIMEFIELD, AFTERPULSEBINTIMEFIELD, AFTERPULSEFILEFIELD = 0, 1, 2
+AFTERPULSETIMEFIELD, AFTERPULSEBINTIMEFIELD = 0, 1
 # AFTERPULSEFILE = TIMEFMT + '_{}_afterpulse.mpl'
 AFTERPULSEFILE = TIMEFMT + '_{}_afterpulse.csv'
-DEADCOUNTTIMEFIELD, DEADCOUNTBINTIMEFIELD, DEADCOUNTFILEFIELD = 0, 1, 2
+DEADCOUNTTIMEFIELD, DEADCOUNTBINTIMEFIELD = 0, 1
 DEADCOUNTFILE = TIMEFMT + '_{}_deadcount.mpl'
-DEADTIMESNFIELD, DEADTIMEFILEFIELD = 0, -1
+DEADTIMESNFIELD = 0
 DEADTIMEFILE = '{}_deadtime.txt'  # s/n of detector head
 
 # scripting; __main__
@@ -50,7 +50,7 @@ ANGOFFSET = 141                 # [deg]
 BINTIMEFMT, BINNUMFMT = '{:.2e}', '{:.0f}'
 
 ## nrb_calc
-NRBSTIMEFIELD, NRBETIMEFIELD, NRBFILEFIELD = 0, 1, 2
+NRBSTIMEFIELD, NRBETIMEFIELD = 0, 1
 NRBDIR = TIMEFMT + '_' + TIMEFMT + '_{}_NRB.txt'  # start, end, array shape
 BLINDRANGE = 0.3                # [km], lidar blind for starting distance
 DELEOVERE = 0.01  # ~1% for averaging time <= 1 min,
@@ -67,24 +67,20 @@ RAYLEIGHCDLAMBDA = 523  # [nm]
 RAYLEIGHCDFDIR = 'rayfil-{}_sing.cdf'  # wavelength
 WAVELENGTH = 532  # [nm]
 WEATHER = 'summer'  # either 'summer' or 'winter'
-RAYWEATHERFIELD, RAYWAVELENGTHFIELD, RAYBINTIMEFIELD, RAYBINNUMFIELD, \
-    RAYFILEFIELD = 0, 1, 2, 3, 4
+RAYWEATHERFIELD, RAYWAVELENGTHFIELD, RAYBINTIMEFIELD, RAYBINNUMFIELD = 0, 1, 2, 3
 RAYLEIGHPROFILE = '{}_{}_'+BINTIMEFMT+'_'+BINNUMFMT+'_rayleigh.txt'  # weather,
                                                                      # wavelength
 
 ## cali_profiles
 CALIPROFILESDIR = SOLARISCODESDIR + '/product_calc/cali_profiles/profiles'
 CALIWRITESIGFIG = 7
-AFTPROTIMEFIELD, AFTPROBINTIMEFIELD, AFTPROBINNUMFIELD, AFTPROFILEFIELD = \
-    0, 1, 2, 3
+AFTPROTIMEFIELD, AFTPROBINTIMEFIELD, AFTPROBINNUMFIELD = 0, 1, 2
 AFTERPULSEPROFILE = '_'.join([TIMEFMT, BINTIMEFMT, BINNUMFMT]) \
     + '_{}_afterpulse.txt'       # lidarname
-OVERPROTIMEFIELD, OVERPROBINTIMEFIELD, OVERPROBINNUMFIELD, OVERPROFILEFIELD = \
-    0, 1, 2, 3
+OVERPROTIMEFIELD, OVERPROBINTIMEFIELD, OVERPROBINNUMFIELD = 0, 1, 2
 OVERLAPPROFILE = '_'.join([TIMEFMT, BINTIMEFMT, BINNUMFMT]) \
     + '_{}_overlap.txt'          # lidarname
-DTSNFIELD, DTLIDARNAMEFIELD, DTPROFILEFIELD = \
-    0, 1, 2
+DTSNFIELD, DTLIDARNAMEFIELD = 0, 1
 DEADTIMEPROFILE = '{}_{}_deadtime.txt'  # s/n of detector head, lidarname
 SPEEDOFLIGHT = 299792.45737195015  # [km s^-1]
 
