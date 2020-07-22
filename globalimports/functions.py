@@ -28,29 +28,40 @@ def haltlogging(func):
 
 # defining functions
 
-def FINDFILESFN(ufmtfilename, directory, *fieldsd):
+def FINDFILESFN(ufmtfilename, directories, *fieldsd):
     '''
     finds files in the stated directory using glob of a wildcard expression of the
     unformatted filename
 
     Parameters
         ufmtfilename (str): filename unformatted field entries
-        directory (str): directory we are searching
+        directories (str or list of strings): directories we are searching in
         fieldsd (dict): contains fields in which we want to fill with entries,
                         leaving wild card for all other unspecified entries
                         keys are field indexes, values are the field inputs
+
+    Return
+        list of file directories with the expression fiven in filename
     '''
     try:                        # filling in fields if specified
         fieldsd = fieldsd[0]
         field_l, del_l = DIRPARSEFN(ufmtfilename, retdelimboo=True)
+        print(del_l)
         for key, value in fieldsd.items():
             field_l[key] = field_l[key].format(value)
         filename = ''.join([x for y in zip(field_l, del_l) for x in y])
     except IndexError:
         filename = ufmtfilename
     # replacing fields with asterisk
+    print(filename)
     filename = re.sub('{.*?}', '*', filename)
-    return glob(DIRCONFN(directory, filename))
+    print(filename)
+    if type(directories) in [list, np.ndarray]:
+        return np.concatenate(
+            [glob(DIRCONFN(dire, filename)) for dire in directories], axis=0
+        )
+    else:
+        return glob(DIRCONFN(directories, filename))
 
 
 def DIRPARSEFN(
@@ -82,6 +93,7 @@ def DIRPARSEFN(
                              f' be an integer index, right now {fieldsli=}')
     else:
         dirstr = osp.basename(dirstr)
+        '''BUG FIX HERE, careful not to make into delimeters the format specifiers'''
         field_l = re.split(delimiters, dirstr)
         try:
             del_l = [''] + field_l[1::2]  # first field has no delimeter
