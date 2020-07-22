@@ -1,5 +1,6 @@
 # imports
 from functools import wraps
+from glob import glob
 import os.path as osp
 import re
 import sys
@@ -27,22 +28,70 @@ def haltlogging(func):
 
 # defining functions
 
-def _dirparse_func(dirstr, field, delimiters):
-    dirstr = osp.basename(dirstr)
-    fielde_l = re.split(delimiters, dirstr)
-    try:                        # adding 'dot' to file extension
-        if dirstr[-(len(fielde_l[-1])+1)] == '.':
-            fielde_l[-1] = '.' + fielde_l[-1]
-    except IndexError:          # single field no extension
-        pass
-    return fielde_l[field]
-_vdirparse_func = np.vectorize(_dirparse_func)
-def DIRPARSEFN(dirstr, field=0, delimiters='_|\.'):
-    '''needs to retain '.' in the last field it seperates'''
+def FINDFILESFN(ufmtfilename, directory, *fieldsd):
+    '''
+    finds files in the stated directory using glob of a wildcard expression of the
+    unformatted filename
+
+    Parameters
+        ufmtfilename (str): filename unformatted field entries
+        directory (str): directory we are searching
+        fieldsd (dict): contains fields in which we want to fill with entries,
+                        leaving wild card for all other unspecified entries
+                        keys are field indexes, values are the field inputs
+    '''
+    try:                        # filling in fields if specified
+        fieldsd = fieldsd[0]
+        field_l, del_l = DIRPARSEFN(ufmtfilename, retdelimboo=True)
+        for key, value in fieldsd.items():
+            field_l[key] = field_l[key].format(value)
+        filename = ''.join([x for y in zip(field_l, del_l) for x in y])
+    except IndexError:
+        filename = ufmtfilename
+    # replacing fields with asterisk
+    filename = re.sub('{.*?}', '*', filename)
+    return glob(DIRCONFN(directory, filename))
+
+
+def DIRPARSEFN(
+        dirstr=None, fieldsli=slice(None), delimiters='(\W|_)', retdelimboo=False
+):
+    '''
+    parenthesis in delimeters garantees that we are keeping the delimeters
+
+    Parameters
+        dirstr (str or array of str): for parsing, can also parse array of strings
+        fieldsli (int or slice): returns fields specified
+        delimeter (str): has to follow the requirements of re.split
+        retdelimboo (boolean): decides whether or not to return delimeters
+
+    Return
+        dirstr (str) -> parsed string [, parsed strings]
+        dirstr (array like) -> list of parsed strings [, list of parsed strings]
+        dirstr (None) -> function to be used as key for sorting
+    '''
+    if not dirstr:
+        return lambda x: DIRPARSEFN(x, fieldsli, delimiters)
     if type(dirstr) in [list, np.ndarray]:
-        return _vdirparse_func(dirstr, field, delimiters)
+        try:
+            return np.vectorize(DIRPARSEFN)(
+                dirstr, fieldsli, delimiters, retdelimboo
+            )
+        except ValueError:
+            raise ValueError('when working with arrays of strings, fieldsli must'
+                             f' be an integer index, right now {fieldsli=}')
     else:
-        return _dirparse_func(dirstr, field, delimiters)
+        dirstr = osp.basename(dirstr)
+        field_l = re.split(delimiters, dirstr)
+        try:
+            del_l = [''] + field_l[1::2]  # first field has no delimeter
+        except IndexError:                # single field string
+            del_l = ['']
+        field_l = field_l[::2]
+        if retdelimboo:
+            return field_l[fieldsli], del_l[fieldsli]
+        else:
+            return field_l[fieldsli]
 
 
 def DIRCONFN(*dirl):
@@ -67,8 +116,8 @@ def DIRCONFN(*dirl):
                     path += dirstr
                 else:
                     path += '/' + dirstr
-
     return path
+
 
 def SETLOGFN(stdoutlog=None, stderrlog=None):
     if stdoutlog:               # setting new logfile
@@ -128,4 +177,5 @@ def GETRESPONSEFN(message, exitboo, twiceboo, checkboo=False, prevmsg=None):
 
 # testing
 if __name__ == '__main__':
-    pass
+
+    print(DIRPARSEFN(['asd_sd_dfjbg.txt', 'asd_sd_dfjbg.txt'], retdelimboo=True))
