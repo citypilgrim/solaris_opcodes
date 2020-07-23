@@ -43,19 +43,17 @@ def FINDFILESFN(ufmtfilename, directories, *fieldsd):
     Return
         list of file directories with the expression fiven in filename
     '''
+
     try:                        # filling in fields if specified
         fieldsd = fieldsd[0]
         field_l, del_l = DIRPARSEFN(ufmtfilename, retdelimboo=True)
-        print(del_l)
         for key, value in fieldsd.items():
             field_l[key] = field_l[key].format(value)
-        filename = ''.join([x for y in zip(field_l, del_l) for x in y])
+        filename = ''.join([x for y in zip(del_l, field_l) for x in y])
     except IndexError:
         filename = ufmtfilename
     # replacing fields with asterisk
-    print(filename)
     filename = re.sub('{.*?}', '*', filename)
-    print(filename)
     if type(directories) in [list, np.ndarray]:
         return np.concatenate(
             [glob(DIRCONFN(dire, filename)) for dire in directories], axis=0
@@ -81,6 +79,10 @@ def DIRPARSEFN(
         dirstr (array like) -> list of parsed strings [, list of parsed strings]
         dirstr (None) -> function to be used as key for sorting
     '''
+    # params
+    fmtspecflag = 'FORMATSPECIFIERFLAG'
+
+    # operations
     if not dirstr:
         return lambda x: DIRPARSEFN(x, fieldsli, delimiters)
     if type(dirstr) in [list, np.ndarray]:
@@ -93,8 +95,18 @@ def DIRPARSEFN(
                              f' be an integer index, right now {fieldsli=}')
     else:
         dirstr = osp.basename(dirstr)
-        '''BUG FIX HERE, careful not to make into delimeters the format specifiers'''
+        # first replace format specifiers to something else before splitting
+        fmtspec_l = re.findall('{.*?}', dirstr)
+        dirstr = re.sub('{.*?}', fmtspecflag, dirstr)
         field_l = re.split(delimiters, dirstr)
+        # replace back the format specifiers after splitting
+        field_l = [
+            re.sub(fmtspecflag, fmtspec_l.pop(0), fielde)
+            if fmtspecflag in fielde
+            else fielde
+            for fielde in field_l
+        ]
+        # parsing
         try:
             del_l = [''] + field_l[1::2]  # first field has no delimeter
         except IndexError:                # single field string
@@ -190,4 +202,6 @@ def GETRESPONSEFN(message, exitboo, twiceboo, checkboo=False, prevmsg=None):
 # testing
 if __name__ == '__main__':
 
-    print(DIRPARSEFN(['asd_sd_dfjbg.txt', 'asd_sd_dfjbg.txt'], retdelimboo=True))
+    teststr = '{1:2}_{}_{!@}_dsa.txt'
+    print(DIRPARSEFN([teststr, teststr], fieldsli=2, retdelimboo=True))
+    # print(DIRPARSEFN(teststr))
