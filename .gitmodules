@@ -6,6 +6,3 @@
 	path = product_calc
 	url = git@github.com:bboytian/solaris_opcodes.product_calc.git
 	branch = stable
-[submodule "ara_calc"]
-	path = ara_calc
-	url = git@github.com:bboytian/solaris_opcodes.ara_calc
