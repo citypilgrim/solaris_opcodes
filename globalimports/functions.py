@@ -43,8 +43,8 @@ def FINDFILESFN(ufmtfilename, directories, *fieldsd):
     Return
         list of file directories with the expression fiven in filename
     '''
-
-    try:                        # filling in fields if specified
+    # filling in fields if specified
+    try:
         fieldsd = fieldsd[0]
         field_l, del_l = DIRPARSEFN(ufmtfilename, retdelimboo=True)
         for key, value in fieldsd.items():
@@ -52,8 +52,11 @@ def FINDFILESFN(ufmtfilename, directories, *fieldsd):
         filename = ''.join([x for y in zip(del_l, field_l) for x in y])
     except IndexError:
         filename = ufmtfilename
+
     # replacing fields with asterisk
     filename = re.sub('{.*?}', '*', filename)
+
+    # finding files
     if type(directories) in [list, np.ndarray]:
         return np.concatenate(
             [glob(DIRCONFN(dire, filename)) for dire in directories], axis=0
@@ -83,8 +86,6 @@ def DIRPARSEFN(
     fmtspecflag = 'FORMATSPECIFIERFLAG'
 
     # operations
-    if not dirstr:
-        return lambda x: DIRPARSEFN(x, fieldsli, delimiters)
     if type(dirstr) in [list, np.ndarray]:
         try:
             return np.vectorize(DIRPARSEFN)(
@@ -93,6 +94,8 @@ def DIRPARSEFN(
         except ValueError:
             raise ValueError('when working with arrays of strings, fieldsli must'
                              f' be an integer index, right now {fieldsli=}')
+    elif not dirstr:
+        return lambda x: DIRPARSEFN(x, fieldsli, delimiters)
     else:
         dirstr = osp.basename(dirstr)
         # first replace format specifiers to something else before splitting
