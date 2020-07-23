@@ -31,8 +31,15 @@ def main(datad, keyofint):
     phi_ta = datad['phi_ta']
 
     # normalising key_tra for color mapping
+    key_tra -= key_tra.min()
+    key_tra /= key_tra.max()
     # key_tra = [key_ra/key_ra.max() for key_ra in key_tra]
-    key_tra = key_tra/key_tra.max()
+    key_tra /= 50
+    # computing colors and alphas
+    key_tra = np.stack([key_tra]*4, axis=-1)
+    key_tra[..., 2] = 1
+    key_tra[..., 0] = 0
+    key_tra[..., 1] = 0
 
     # computing cartesian coords
     x_tra = r_tra * np.sin(theta_ta)[:, None] * np.cos(phi_ta)[:, None]
@@ -58,8 +65,8 @@ def main(datad, keyofint):
         key_ra = key_tra[i][r_rm]
 
         ax3d.scatter(
-            x_ra, y_ra, z_ra,
-            c=key_ra, cmap=colormap
+            x_ra, y_ra, z_ra, s=100,
+            c=key_ra
         )
 
     plt.show()
@@ -73,8 +80,8 @@ if __name__ == '__main__':
 
     nrb_d = nrb_calc(
         'smmpl_E2', smmpl_reader,
-        starttime=pd.Timestamp('202007220900'),
-        endtime=pd.Timestamp('202007220930'),
+        starttime=pd.Timestamp('202007220000'),
+        endtime=pd.Timestamp('202007220030'),
         genboo=True
     )
     main(nrb_d, 'NRB2_tra')
