@@ -80,7 +80,7 @@ def DIRPARSEFN(
     Return
         dirstr (str) -> parsed string [, parsed strings]
         dirstr (array like) -> list of parsed strings [, list of parsed strings]
-        dirstr (None) -> function to be used as key for sorting
+        dirstr (None) -> function to be used as key for sorting or mapping
     '''
     # params
     fmtspecflag = 'FORMATSPECIFIERFLAG'
