@@ -87,7 +87,7 @@ if __name__ == '__main__':
     from ..product_calc.nrb_calc import nrb_calc
     from ..file_readwrite.mpl_reader import smmpl_reader
 
-    starttime = pd.Timestamp('202007240400')
+    starttime = pd.Timestamp('202007250330')
     endtime = starttime + pd.Timedelta(30, 'm')
 
     nrb_d = nrb_calc(

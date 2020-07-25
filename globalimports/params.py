@@ -43,7 +43,9 @@ DEADTIMEFILE = '{}_deadtime.txt'  # s/n of detector head
 
 # ara_calc
 ANGOFFSET = 141                 # [deg]
-
+ELEVATION = 70                              # [m]
+LATITUDE, LONGITUDE = 1.299119, 103.771232 # [deg]
+UTCINFO = 8                                # [hrs]
 
 # product_calc
 

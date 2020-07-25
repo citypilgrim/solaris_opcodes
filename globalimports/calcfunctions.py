@@ -69,3 +69,17 @@ def LIDAR2SPHEREFN(dir_ara, angoffset):
     phi_ara[phi_ara > np.pi] -= 2*np.pi
 
     return theta_ara, phi_ara
+
+
+def LOCTIMEFN(pdtimestampinput, utcinfo):
+    '''
+    converts pdtimestampinput into a timezone aware pd.Timestamp object
+    will take in whatever input which pd.Timestamp also accepts
+
+    utcinfo is abstracted to allow for future changes
+    '''
+    ts = pd.Timestamp(pdtimestampinput).tz_localize(
+        dt.timezone(dt.timedelta(hours=utcinfo))
+    )
+
+    return ts
