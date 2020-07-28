@@ -71,15 +71,31 @@ def LIDAR2SPHEREFN(dir_ara, angoffset):
     return theta_ara, phi_ara
 
 
-def LOCTIMEFN(pdtimestampinput, utcinfo):
+def LOCTIMEFN(tsinput=None, utcinfo=None):
     '''
-    converts pdtimestampinput into a timezone aware pd.Timestamp object
-    will take in whatever input which pd.Timestamp also accepts
+    converts tsinput into a timezone aware datetime like object
+    preserving the datetime object type which was used for the input
 
     utcinfo is abstracted to allow for future changes
     '''
-    ts = pd.Timestamp(pdtimestampinput).tz_localize(
-        dt.timezone(dt.timedelta(hours=utcinfo))
-    )
+    '''
+    DEBUG FOR NUMPY ND ARRAY
+    '''
+    tstype = type(tsinput)
+    print(tstype)
+    if tstype in [list, np.ndarray]:
+        return np.vectorize(LOCTIMEFN(utcinfo=utcinfo))(tsinput)
 
-    return ts
+    elif isinstance(tstype, type(None)):
+        return lambda x: LOCTIMEFN(x, utcinfo=utcinfo)
+
+    else:
+        tz = dt.timezone(dt.timedelta(hours=utcinfo))
+
+        if tstype in [pd.Timestamp, pd.DatetimeIndex]:
+            return tsinput.tz_localize(tz)
+        elif tstype == dt.datetime:
+            return tz.localize(tsinput)
+
+        else:
+            raise TypeError('tsinput is not a specified type')
