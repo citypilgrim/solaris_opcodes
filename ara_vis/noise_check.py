@@ -21,12 +21,13 @@ def main(mpld):
     ax1.errorbar(
         mplts_a, mpld['Background Average'],
         yerr=mpld['Background Std Dev'],
-        color='C0', marker='o'
+        color='C0', marker='o', label='background'
     )
 
     # plotting angles
     sf = sunforecaster(LATITUDE, LONGITUDE, ELEVATION)
     ts_a = pd.date_range(start=mplts_a[0], end=mplts_a[-1], freq='T')
+    ts_a = LOCTIMEFN(ts_a, UTCINFO)
     thetas_a, phis_a = sf.get_anglesvec(ts_a)
     dir_a = np.stack([
         mpld['Azimuth Angle'], mpld['Elevation Angle']
@@ -34,14 +35,15 @@ def main(mpld):
     mpltheta_a, mplphi_a = LIDAR2SPHEREFN(dir_a, np.deg2rad(ANGOFFSET))
     mpltheta_a, mplphi_a = np.rad2deg(mpltheta_a), np.rad2deg(mplphi_a)
     thetas_a, phis_a = np.rad2deg(thetas_a), np.rad2deg(phis_a)
-    phis_a[phis_a>180] -= 360
-    phis_a[phis_a<-180] += 360
-    ax2.plot(ts_a, thetas_a, color='C1')
+    phis_a[phis_a > 180] -= 360
+    phis_a[phis_a < -180] += 360
+    ax2.plot(ts_a, thetas_a, color='C1', label='thetas')
     ax2.plot(mplts_a, mpltheta_a, marker='x', linestyle='', color='C1')
-    ax2.plot(ts_a, phis_a, color='C2')
+    ax2.plot(ts_a, phis_a, color='C2', label='phis')
     ax2.plot(mplts_a, mplphi_a, marker='x', linestyle='', color='C2')
 
-
+    ax1.legend(loc=1)
+    ax2.legend(loc=2)
     plt.show()
 
 
@@ -52,7 +54,7 @@ if __name__ == '__main__':
     from ..file_readwrite.mpl_reader import smmpl_reader
 
     starttime = pd.Timestamp('202007210000')
-    endtime = pd.Timestamp(dt.datetime.now())
+    endtime = pd.Timestamp('202007280000')
 
     mpl_d = smmpl_reader(
         'smmpl_E2',

@@ -82,20 +82,24 @@ def LOCTIMEFN(tsinput=None, utcinfo=None):
     DEBUG FOR NUMPY ND ARRAY
     '''
     tstype = type(tsinput)
-    print(tstype)
     if tstype in [list, np.ndarray]:
         return np.vectorize(LOCTIMEFN(utcinfo=utcinfo))(tsinput)
 
-    elif isinstance(tstype, type(None)):
-        return lambda x: LOCTIMEFN(x, utcinfo=utcinfo)
+    elif isinstance(tsinput, type(None)):
+        return lambda x: LOCTIMEFN(x, utcinfo)
 
     else:
         tz = dt.timezone(dt.timedelta(hours=utcinfo))
 
         if tstype in [pd.Timestamp, pd.DatetimeIndex]:
-            return tsinput.tz_localize(tz)
+            try:
+                return tsinput.tz_localize(tz)
+            except TypeError:   # setting the UTC of already tz aware timestamps
+                return tsinput.tz_convert(tz)
         elif tstype == dt.datetime:
-            return tz.localize(tsinput)
+            return tsinput.replace(tzinfo=tz.utc)
+        elif tstype == np.datetime64:
+            return LOCTIMEFN(tsinput.astype(dt.datetime), utcinfo)
 
         else:
             raise TypeError('tsinput is not a specified type')

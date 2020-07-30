@@ -46,23 +46,22 @@ def main(
         mpldir_a = np.stack(
             [mpl_d['Azimuth Angle'], mpl_d['Elevation Angle']],
             axis=1
-        )
-        mpldir_a = np.round(mpldir_a, 2)
-        print(mpldir_a)
-        mpldir_l = mpldir_a.tolist()
-        mpldir_l = [tuple(mpldir) for mpldir in mpldir_l]
-        # print(mpldir_l)
+        ).astype(np.float64)    # need to have same precision as python float
+                                # for hashing
+        mpldir_l = [tuple(np.round(mpldir, 2)) for mpldir in mpldir_a]
 
         # enumerating scanpat points
-        spdir_dic = {spdir: i for i, spdir in enumerate(spdir_l)}
+        spdir_d = {spdir: i for i, spdir in enumerate(spdir_l)}
 
         # matching measured angles
-        mplind_l = list(map(lambda x: spdir_dic[x], mpldir_l))
+        mplind_l = list(map(lambda x: spdir_d[x], mpldir_l))
+
+        print(len(mplind_l), len(spdir_d))
 
         # plotting resutls
+        plt.plot(list(spdir_d.values()))
         plt.plot(mplind_l)
-        plt.plot(spdir_dic.values())
-
+        break
     plt.show()
 
 
