@@ -29,11 +29,17 @@ def main(
     date_l = list(map(lambda x: DIRCONFN(SOLARISMPLDIR.format(lidarname), x), date_l))
     ## reading scanpattern files for angles
     sp_l = FINDFILESFN(SCANPATFILE, date_l)
+    sp_l.sort()
+    sp_l = list(filter(lambda x:
+                    pd.Timestamp(DIRPARSEFN(x, fieldsli=SCANPATSTFIELD)) >= starttime
+                    and
+                    pd.Timestamp(DIRPARSEFN(x, fieldsli=SCANPATETFIELD)) <= endtime,
+                    sp_l
+    ))
     spst_l = list(map(DIRPARSEFN(fieldsli=SCANPATSTFIELD), sp_l))
     spet_l = list(map(DIRPARSEFN(fieldsli=SCANPATETFIELD), sp_l))
     spst_l = list(map(pd.Timestamp, spst_l))
     spet_l = list(map(pd.Timestamp, spet_l))
-
 
     # comparing each indivdual scan pattern with the scan angles
     for i, sp in enumerate(sp_l):
@@ -41,8 +47,8 @@ def main(
         # reading files
         spdir_l = np.loadtxt(sp, delimiter=', ').tolist()
         spdir_l = [tuple(spdir) for spdir in spdir_l]
-        mpl_d = smmpl_reader(lidarname, starttime=spst_l[i], endtime=spet_l[i],
-                             verbboo=False)
+        mpl_d = smmpl_reader(lidarname, starttime=spst_l[i], endtime=spet_l[i]
+                             , verbboo=False)
         mpldir_a = np.stack(
             [mpl_d['Azimuth Angle'], mpl_d['Elevation Angle']],
             axis=1
@@ -56,10 +62,11 @@ def main(
         # matching measured angles
         mplind_l = list(map(lambda x: spdir_d[x], mpldir_l))
 
-        print(len(mplind_l), len(spdir_d))
-
         # plotting resutls
+        print(len(spdir_d.values()))
         plt.plot(list(spdir_d.values()))
+
+        print(len(mplind_l))
         plt.plot(mplind_l)
         break
     plt.show()
@@ -67,7 +74,7 @@ def main(
 
 
 if __name__ == '__main__':
-    starttime = pd.Timestamp('202007240400')
+    starttime = pd.Timestamp('202007312330')
     endtime = starttime + pd.Timedelta(30, 'm')
 
     main(

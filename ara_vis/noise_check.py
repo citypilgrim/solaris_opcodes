@@ -53,8 +53,8 @@ if __name__ == '__main__':
     import pandas as pd
     from ..file_readwrite.mpl_reader import smmpl_reader
 
-    starttime = pd.Timestamp('202007210000')
-    endtime = pd.Timestamp('202007280000')
+    starttime = pd.Timestamp('202007310000')
+    endtime = pd.Timestamp(dt.datetime.now())
 
     mpl_d = smmpl_reader(
         'smmpl_E2',

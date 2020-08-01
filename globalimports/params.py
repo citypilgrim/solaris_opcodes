@@ -20,7 +20,7 @@ SOLARISRAZONDATADIR = SOLARISDATADIR + '/razon_E2'
 ## data nomenclature; indices to change manually when fmts are adjusted
 DATEFMT, TIMEFMT = '{:%Y%m%d}', '{:%Y%m%d%H%M}'  # must be compatible for pandas
 SCANPATSTFIELD, SCANPATETFIELD = 0, 1
-SCANPATFILE = TIMEFMT + '_' + TIMEFMT + '_scanpat.txt'
+SCANPATFILE = TIMEFMT + '_' + TIMEFMT + '_skyscan.txt'
 MPLTIMEFIELD = 0
 MPLFILE = TIMEFMT + '.mpl'
 MPLEOMTIMEFIELD = 0
