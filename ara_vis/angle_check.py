@@ -49,7 +49,7 @@ def main(
         spdir_l = np.loadtxt(sp, delimiter=', ').tolist()
         spdir_l = [tuple(spdir) for spdir in spdir_l]
         mpl_d = smmpl_reader(lidarname, starttime=spst_l[i], endtime=spet_l[i],
-                             includecurrfileboo=True, verbboo=False)
+                             verbboo=False)
         mpldir_a = np.stack(
             [mpl_d['Azimuth Angle'], mpl_d['Elevation Angle']],
             axis=1
@@ -59,6 +59,8 @@ def main(
 
         # enumerating scanpat points
         spdir_d = {spdir: i for i, spdir in enumerate(spdir_l)}
+        print(mpldir_l)
+        print(spdir_d)
 
         # matching measured angles
         mplind_l = list(map(lambda x: spdir_d[x], mpldir_l))
@@ -69,13 +71,12 @@ def main(
 
         print('\tnumber of points covered', len(mplind_l))
         plt.plot(mplind_l)
-        break
     plt.show()
 
 
 
 if __name__ == '__main__':
-    starttime = pd.Timestamp('202008030730')
+    starttime = pd.Timestamp('202008030800')
     endtime = starttime + pd.Timedelta(30, 'm')
 
     main(
