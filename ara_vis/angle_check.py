@@ -43,12 +43,13 @@ def main(
 
     # comparing each indivdual scan pattern with the scan angles
     for i, sp in enumerate(sp_l):
+        print(sp)
 
         # reading files
         spdir_l = np.loadtxt(sp, delimiter=', ').tolist()
         spdir_l = [tuple(spdir) for spdir in spdir_l]
-        mpl_d = smmpl_reader(lidarname, starttime=spst_l[i], endtime=spet_l[i]
-                             , verbboo=False)
+        mpl_d = smmpl_reader(lidarname, starttime=spst_l[i], endtime=spet_l[i],
+                             includecurrfileboo=True, verbboo=False)
         mpldir_a = np.stack(
             [mpl_d['Azimuth Angle'], mpl_d['Elevation Angle']],
             axis=1
@@ -63,10 +64,10 @@ def main(
         mplind_l = list(map(lambda x: spdir_d[x], mpldir_l))
 
         # plotting resutls
-        print(len(spdir_d.values()))
+        print('\tnumber of points in scan pattern', len(spdir_d.values()))
         plt.plot(list(spdir_d.values()))
 
-        print(len(mplind_l))
+        print('\tnumber of points covered', len(mplind_l))
         plt.plot(mplind_l)
         break
     plt.show()
@@ -74,7 +75,7 @@ def main(
 
 
 if __name__ == '__main__':
-    starttime = pd.Timestamp('202007312330')
+    starttime = pd.Timestamp('202008030730')
     endtime = starttime + pd.Timedelta(30, 'm')
 
     main(
