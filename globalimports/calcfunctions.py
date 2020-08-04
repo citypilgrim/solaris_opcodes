@@ -78,9 +78,6 @@ def LOCTIMEFN(tsinput=None, utcinfo=None):
 
     utcinfo is abstracted to allow for future changes
     '''
-    '''
-    DEBUG FOR NUMPY ND ARRAY
-    '''
     tstype = type(tsinput)
     if tstype in [list, np.ndarray]:
         return np.vectorize(LOCTIMEFN(utcinfo=utcinfo))(tsinput)
@@ -97,7 +94,7 @@ def LOCTIMEFN(tsinput=None, utcinfo=None):
             except TypeError:   # setting the UTC of already tz aware timestamps
                 return tsinput.tz_convert(tz)
         elif tstype == dt.datetime:
-            return tsinput.replace(tzinfo=tz.utc)
+            return tsinput.replace(tzinfo=tz)
         elif tstype == np.datetime64:
             return LOCTIMEFN(tsinput.astype(dt.datetime), utcinfo)
 
