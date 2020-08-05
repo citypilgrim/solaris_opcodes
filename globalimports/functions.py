@@ -91,7 +91,7 @@ def DIRPARSEFN(
         try:
             return np.vectorize(DIRPARSEFN)(
                 dirstr, fieldsli, delimiters, retdelimboo
-            ).astype(object)
+            )
         except ValueError:
             raise ValueError('when working with arrays of strings, fieldsli must'
                              f' be an integer index, right now {fieldsli=}')
