@@ -79,7 +79,8 @@ def DIRPARSEFN(
 
     Return
         dirstr (str) -> parsed string [, parsed strings]
-        dirstr (array like) -> list of parsed strings [, list of parsed strings]
+        dirstr (array like) -> array of parsed strings [, list of parsed strings]
+                               dtype == object
         dirstr (None) -> function to be used as key for sorting or mapping
     '''
     # params
@@ -90,7 +91,7 @@ def DIRPARSEFN(
         try:
             return np.vectorize(DIRPARSEFN)(
                 dirstr, fieldsli, delimiters, retdelimboo
-            )
+            ).astype(object)
         except ValueError:
             raise ValueError('when working with arrays of strings, fieldsli must'
                              f' be an integer index, right now {fieldsli=}')

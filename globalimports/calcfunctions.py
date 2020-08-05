@@ -97,6 +97,8 @@ def LOCTIMEFN(tsinput=None, utcinfo=None):
             return tsinput.replace(tzinfo=tz)
         elif tstype == np.datetime64:
             return LOCTIMEFN(tsinput.astype(dt.datetime), utcinfo)
+        elif tstype in [np.str_, str]:
+            return LOCTIMEFN(pd.Timestamp(str(tsinput)), utcinfo)
 
         else:
-            raise TypeError('tsinput is not a specified type')
+            raise TypeError(f'tsinput with type {tstype} is not a specified type')

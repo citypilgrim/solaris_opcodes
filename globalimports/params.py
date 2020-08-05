@@ -45,7 +45,7 @@ DEADTIMEFILE = '{}_deadtime.txt'  # s/n of detector head
 ANGOFFSET = 141                 # [deg]
 ELEVATION = 70                              # [m]
 LATITUDE, LONGITUDE = 1.299119, 103.771232 # [deg]
-UTCINFO = 0                                # [hrs], follows the time on computer
+UTCINFO = 0                                # [hrs], follows time of data
 
 # product_calc
 
