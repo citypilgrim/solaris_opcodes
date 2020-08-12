@@ -6,6 +6,3 @@
 	path = product_calc
 	url = git@github.com:bboytian/solaris_opcodes.product_calc.git
 	branch = stable
-[submodule "global_imports"]
-	path = global_imports
-	url = git@github.com:bboytian/solar_ema_project.global_imports.git
