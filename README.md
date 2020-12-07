@@ -11,3 +11,7 @@ Will utilise the latest dataset avaiable to get a complete atmospheric profile s
 ```
 python -m solaris_opcodes.product_calc.cloudproduct_print
 ```
+
+## Dependencies
+
+1. A working `rsync` with it's dependencies
