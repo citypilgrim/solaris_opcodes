@@ -48,7 +48,7 @@ if __name__ == '__main__':
     Test out the transfer without the need for using ssh
     '''
     main(
-        '172.16.39.48', 'mpluser',
+        '172.16.39.48', 'mpluser', '/home/tianli/'
         'C:/Users/mpluser/Desktop/smmpl_E2',
         'smmpl_E2',
         [
