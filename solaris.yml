@@ -3,6 +3,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - descartes=1.1.0
   - geopandas=0.8.1
   - matplotlib=3.2.0
   - numpy=1.18.1
