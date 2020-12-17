@@ -65,12 +65,13 @@ def main(
         NRB_tra = nrbd['NRB_tra']
         r_tra = nrbd['r_tra'] * 1000
         r_trm = nrbd['r_trm']
-        phi_ta = nrbd['phi_ta'] - phib  # azimuthal offset for lidar
-        psi_ta = phi_ta + np.pi/2       # psi is the angle inthe 2D projection
-                                        # anti clockwise from E(longitude) axis
+        phi_ta = nrbd['phi_ta']
+        psi_ta = nrbd['phi_ta'] + np.pi/2       # psi is the angle inthe 2D projection
+                                                # anti clockwise from E(longitude) axis
 
         # scan lines; coverting local NE to lat long, referenced from the lidar
         # coordinates
+        print('computing lidar point')
         point1lat_ta = lidar_lat*np.ones_like(psi_ta)
         point1lg_ta = lidar_lg*np.ones_like(psi_ta)
         point1n_ta, point1e_ta, point1d_ta = geodetic2ned(
@@ -78,6 +79,7 @@ def main(
             lidar_lat, lidar_lg, lidar_h
         )
 
+        print('computing scan points')
         point2n_ta = point1n_ta + _D*np.sin(psi_ta)
         point2e_ta = point1e_ta + _D*np.cos(psi_ta)
         point2lat_ta, point2lg_ta, _ = ned2geodetic(
@@ -89,6 +91,7 @@ def main(
         r_trm *= NRB_tra > _nrbthres
 
         # range (time, bins)
+        print('computing range points')
         rn_tra = point1n_ta[:, None] + r_tra * np.sin(psi_ta)[:, None]
         re_tra = point1e_ta[:, None] + r_tra * np.cos(psi_ta)[:, None]
         rlat_tra, rlg_tra, _ = ned2geodetic(
@@ -96,7 +99,10 @@ def main(
             lidar_lat, lidar_lg, lidar_h,
         )
 
+        # error bars
+
         ## errorbar for range; (time, bins, 2(lower limit, upper limit))
+        print('computing range error bar')
         deln_ta = _delr/2 * np.sin(psi_ta)
         dele_ta = _delr/2 * np.cos(psi_ta)
         delrn_tr2a = np.stack([
@@ -111,6 +117,7 @@ def main(
         )
 
         ## error bar for azimuth; (time, bins, _psinum), 'n' represents _psinum
+        print('computing azimuthal error bar')
         delpsi_na = np.linspace(-delphib, delphib, _psinum)
         delpsi_tna = psi_ta[:, None] + delpsi_na
         delpsin_trna = point1n_ta[:, None, None] + r_tra[:, :, None] * \
@@ -132,7 +139,8 @@ def main(
 
             # scan lines
             ax.plot(
-                point1lg_ta[j], point1lat_ta[j],
+                [point1lg_ta[j], point2lg_ta[j]],
+                [point1lat_ta[j], point2lat_ta[j]],
                 '-', alpha=0.3, color=color
             )
 
@@ -175,7 +183,7 @@ if __name__ == '__main__':
     from ..product_calc.nrb_calc import main as nrb_calc
     from ..global_imports.solaris_opcodes import *
 
-    phib = 140.6
+    phib = 141.6
 
     nrbd_l = []
     # nrbd_l.append(nrb_calc(
@@ -184,12 +192,12 @@ if __name__ == '__main__':
     #     endtime=LOCTIMEFN('202003040900', 0),
     #     angularoffset=phib
     # ))
-    nrbd_l.append(nrb_calc(
-        'smmpl_E2', smmpl_reader,
-        starttime=LOCTIMEFN('202008280250', 0),
-        endtime=LOCTIMEFN('202008280350', 0),
-        angularoffset=phib
-    ))
+    # nrbd_l.append(nrb_calc(
+    #     'smmpl_E2', smmpl_reader,
+    #     starttime=LOCTIMEFN('202008280250', 0),
+    #     endtime=LOCTIMEFN('202008280350', 0),
+    #     angularoffset=phib
+    # ))
     nrbd_l.append(nrb_calc(
         'smmpl_E2', smmpl_reader,
         starttime=LOCTIMEFN('202009132007', 0),
