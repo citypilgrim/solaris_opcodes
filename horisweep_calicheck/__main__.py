@@ -11,7 +11,9 @@ _delr = 15
 _nrbthres = 5
 
 _psinum = 10                  # number of points for uncertainty in azimuth plot
-
+_markeralpha = 0.3
+_reference_markeralpha = 1      # darker color for reference marker
+_reference_markercolor = 'k'
 
 # main func
 def main(
@@ -56,10 +58,10 @@ def main(
     for i, nrbd in enumerate(nrbds):
         color = f'C{i+1}'
         if i == 0:
-            markeralpha = 1  # darker color for reference marker
-            markercolor = 'k'
+            markeralpha = _reference_markeralpha
+            markercolor = _reference_markercolor
         else:
-            markeralpha = 0.3
+            markeralpha = _markeralpha
             markercolor = color
 
         NRB_tra = nrbd['NRB_tra']
@@ -123,7 +125,7 @@ def main(
         delpsin_trna = point1n_ta[:, None, None] + r_tra[:, :, None] * \
             np.sin(delpsi_tna)[:, None, :]
         delpsie_trna = point1e_ta[:, None, None] + r_tra[:, :, None] * \
-            np.sin(delpsi_tna)[:, None, :]
+            np.cos(delpsi_tna)[:, None, :]
         delpsilat_trna, delpsilg_trna, _ = ned2geodetic(
             delpsin_trna, delpsie_trna, point1d_ta[:, None, None],
             lidar_lat, lidar_lg, lidar_h
@@ -155,18 +157,16 @@ def main(
             for k in range(np.sum(r_rm)):
 
                 # plotting range error bars
-                delr_r2m = np.stack([r_rm]*2, axis=1)
                 ax.plot(
-                    delrlg_tr2a[j][delr_r2m][k],
-                    delrlat_tr2a[j][delr_r2m][k],
+                    delrlg_tr2a[j][r_rm][k],
+                    delrlat_tr2a[j][r_rm][k],
                     '-', color='k'
                 )
 
                 # plotting azimuth error bars
-                delpsi_r2m = np.stack([r_rm]*_psinum, axis=1)
                 ax.plot(
-                    delpsilg_trna[j][delpsi_r2m][k],
-                    delpsilat_trna[j][delpsi_r2m][k],
+                    delpsilg_trna[j][r_rm][k],
+                    delpsilat_trna[j][r_rm][k],
                     '-', color='k'
                 )
 
@@ -178,33 +178,42 @@ def main(
 
 # running
 if __name__ == '__main__':
+    '''
+    Edit the starttime and endtime of the second item appended to the nrbd_l
+    to the dataset of interest, for comparison with the reference point
+
+    By default the cadastral_dir is chosen to be the cropped cadastral of
+    fusionopolis.
+
+    Code takes about 3 mins to run due to the usage of pymap3d functions instead of
+    a more quick and dirty function
+    '''
+
     # imports
     from ..file_readwrite import smmpl_reader
     from ..product_calc.nrb_calc import main as nrb_calc
     from ..global_imports.solaris_opcodes import *
 
-    phib = 141.6
+    # reading data params
+    phib = 141.4
+    lidarname = 'smmpl_E2'
 
+    # reading data
     nrbd_l = []
-    # nrbd_l.append(nrb_calc(
-    #     'smmpl_E2', smmpl_reader,
-    #     starttime=LOCTIMEFN('202003040341', 0),
-    #     endtime=LOCTIMEFN('202003040900', 0),
-    #     angularoffset=phib
-    # ))
-    # nrbd_l.append(nrb_calc(
-    #     'smmpl_E2', smmpl_reader,
-    #     starttime=LOCTIMEFN('202008280250', 0),
-    #     endtime=LOCTIMEFN('202008280350', 0),
-    #     angularoffset=phib
-    # ))
+    nrbd_l.append(nrb_calc(     # reference point
+        lidarname, smmpl_reader,
+        starttime=LOCTIMEFN('202008280250', 0),
+        endtime=LOCTIMEFN('202008280350', 0),
+        angularoffset=phib
+    ))
     nrbd_l.append(nrb_calc(
-        'smmpl_E2', smmpl_reader,
+        lidarname, smmpl_reader,
         starttime=LOCTIMEFN('202009132007', 0),
         endtime=LOCTIMEFN('202009132113', 0),
         angularoffset=phib
     ))
 
+    # main params
     lidar_lat, lidar_lg = 1.299119, 103.771232  # [deg], at E2
     lidar_h = 70
     delphib = np.deg2rad(0.4)
