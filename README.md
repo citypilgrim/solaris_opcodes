@@ -16,7 +16,7 @@ Some setup is required on the lidar laptop (Windows platform) before being able 
 
 ## Usage
 
-### Retreiving cloud product
+### Computing cloud product and writing to file
 
 Will utilise the latest dataset avaiable to get a complete atmospheric profile sweep of cloud products.
 
@@ -28,6 +28,12 @@ python -m solaris_opcodes.product_calc.cloudproduct_print
 
 python -m solaris_opcodes.lidardata_pull
 
+### Horizontal lidar sweep calibration check
+
+Edit the mutable parameters in the module stated below accordingly and run
+```
+python -m solaris_opcodes.horisweep_calicheck
+```
 
 ## Dependencies
 

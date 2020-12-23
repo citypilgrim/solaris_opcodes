@@ -61,8 +61,11 @@ if __name__ == '__main__':
     lidaruser = 'mpluser'
     lidardata_dir = f'C:/Users/mpluser/Desktop/{lidarname}'
 
+    lidar_utcoffset = 0         # [hrs]
+
     # pulling
-    today = dt.datetime.today()
+    utcoffset = SOLARISUTCOFFSET - lidar_utcoffset
+    today = dt.datetime.today() - dt.timedelta(hours=utcoffset)
     yesterday = today - dt.timedelta(days=1)
     main(
         lidar_ip, lidaruser,

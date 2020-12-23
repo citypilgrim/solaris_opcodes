@@ -1,0 +1,1 @@
+0-59/10 * * * * PYTHONPATH=/home/tianli/SOLAR_EMA_project/codes /home/tianli/anaconda3/envs/solaris/bin/python -m solaris_opcodes.product_calc.cloudproduct_print
