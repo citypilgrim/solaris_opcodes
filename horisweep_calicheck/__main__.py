@@ -217,7 +217,7 @@ if __name__ == '__main__':
     lidar_lat, lidar_lg = 1.299119, 103.771232  # [deg], at E2
     lidar_h = 70
     delphib = np.deg2rad(0.4)
-    cadastral_dir = '/home/tianli/SOLAR_EMA_project/codes/smmpl_codes/horisweep_plot/cadastral_trimmer/cadastral_AOI.geojson'
+    cadastral_dir = '/home/tianli/SOLAR_EMA_project/codes/solaris_opcodes/horisweep_calicheck/cadastral_trimmer/cadastral_AOI.geojson'
 
     main(
         lidar_lat, lidar_lg, lidar_h,
