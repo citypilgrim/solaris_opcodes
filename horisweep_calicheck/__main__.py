@@ -195,21 +195,21 @@ if __name__ == '__main__':
     from ..global_imports.solaris_opcodes import *
 
     # reading data params
-    phib = 141.4
+    phib = 141.4                          # reference angle dataset
     lidarname = 'smmpl_E2'
 
     # reading data
     nrbd_l = []
-    nrbd_l.append(nrb_calc(     # reference point
+    nrbd_l.append(nrb_calc(               # refence point data set
         lidarname, smmpl_reader,
-        starttime=LOCTIMEFN('202008280250', 0),
-        endtime=LOCTIMEFN('202008280350', 0),
+        starttime=LOCTIMEFN('202012202007', 0),
+        endtime=LOCTIMEFN('202012202113', 0),
         angularoffset=phib
     ))
     nrbd_l.append(nrb_calc(
         lidarname, smmpl_reader,
-        starttime=LOCTIMEFN('202009132007', 0),
-        endtime=LOCTIMEFN('202009132113', 0),
+        starttime=LOCTIMEFN('202102142007', 0),
+        endtime=LOCTIMEFN('202102142113', 0),
         angularoffset=phib
     ))
 
