@@ -1,12 +1,12 @@
 # imports
 import telegram as tel
 
-from ...global_imports.smmpl_opcodes import *
+from ...global_imports.solaris_opcodes import *
 
 
 # params
 _msgprepend = f'''
-Message Type: Equipment Status
+Message Type: SOLARIS Warning
 Equipment: {LIDARNAME}
 '''
 

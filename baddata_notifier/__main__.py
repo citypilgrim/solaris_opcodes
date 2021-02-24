@@ -6,7 +6,7 @@ import time
 
 from .baddata_flags import baddataflags_l
 from .telegram_API import main as telegram_API
-from ..global_imports.smmpl_opcodes import *
+from ..global_imports.solaris_opcodes import *
 
 
 # params
@@ -40,12 +40,11 @@ def main(timestamp, lidarname):
         print('\n'.join(['\t' + line for line in msg.split('\n')]))
 
 
-
 # running
 if __name__ == '__main__':
     # imports
     import datetime as dt
 
-    timestamp = LOCTIMEFN(dt.datetime.now(), UTCINFO)
+    timestamp = LOCTIMEFN(dt.datetime.now(), SOLARISUTCOFFSET)
     lidarname = LIDARNAME
     main(timestamp, lidarname)

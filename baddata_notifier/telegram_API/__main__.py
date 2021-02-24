@@ -5,7 +5,7 @@ import multiprocessing as mp
 import telegram as tel
 
 from .notification_send import main as notification_send
-from ...global_imports.smmpl_opcodes import *
+from ...global_imports.solaris_opcodes import *
 
 
 # params

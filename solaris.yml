@@ -12,3 +12,4 @@ dependencies:
   - scipy=1.4.1
   - netcdf4=1.5.3
   - pymap3d=2.4.3=py_0
+  - python-telegram-bot=12.8
