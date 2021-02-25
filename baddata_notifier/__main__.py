@@ -31,7 +31,7 @@ def main(timestamp, lidarname):
     msg = ''
 
     for baddataflags_func in baddataflags_l:
-        msg += baddataflags_func(timestamp, lidarname)
+        msg += baddataflags_func(timestamp, lidarname) + '\n'
 
     if msg:
         telegram_API(_msgprepend + msg)

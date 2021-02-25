@@ -1,5 +1,7 @@
 # imports
 import os
+
+import numpy as np
 import pandas as pd
 
 from ...file_readwrite import cloudproduct_reader
@@ -61,7 +63,9 @@ def main(endtime, lidarname):
     ])
     file_a = file_a[(time_a >= starttime) * (time_a <= endtime)]
 
-
+    if not file_a.size:                  # makesure that there are files to read
+        msg = ''
+        return msg
 
     # reading all files and checking if all nan
     nan_a = np.array([                      # ind -1 takes only the cloud heightb
