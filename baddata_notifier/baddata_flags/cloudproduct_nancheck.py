@@ -79,7 +79,7 @@ def main(endtime, lidarname):
         msg = '<pre>' + 'No cloud layers from:' + '</pre>\n'\
           + '<pre>' + f'{endtime}' + '</pre>\n'\
           + '<pre>' + 'to:' + '</pre>\n'\
-          + '<pre>' + f'{starttime}' + '</pre>\n'
+          + '<pre>' + f'{starttime}' + '</pre>\n\n'
     else:
         msg = ''
 

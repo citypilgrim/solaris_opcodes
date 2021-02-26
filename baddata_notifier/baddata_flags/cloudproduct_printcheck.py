@@ -48,7 +48,8 @@ def main(endtime, lidarname):
     if not file_a.size:
         msg = '<pre>' + 'No cloud height file produced' + '</pre>\n'\
           + '<pre>' + f'in the last {CLOUDPRINTDURATION} mins from:' + '</pre>\n'\
-          + '<pre>' + f'{endtime}' + '</pre>\n'
+          + '<pre>' + f'{endtime}' + '</pre>\n\n'
+        msg =_msgprepend + msg
     else:
         msg = ''
 
